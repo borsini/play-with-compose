@@ -1,0 +1,1 @@
+![Simple component](./assets/bass-detail.png)
