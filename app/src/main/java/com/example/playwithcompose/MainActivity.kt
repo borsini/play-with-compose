@@ -5,13 +5,11 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
 import androidx.compose.remember
-import androidx.ui.core.ContentScale
-import androidx.ui.core.Modifier
-import androidx.ui.core.clip
-import androidx.ui.core.setContent
+import androidx.ui.core.*
 import androidx.ui.foundation.*
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
 import androidx.ui.graphics.Color
+import androidx.ui.graphics.asImageAsset
 import androidx.ui.layout.*
 import androidx.ui.material.*
 import androidx.ui.material.icons.Icons
@@ -22,6 +20,7 @@ import androidx.ui.text.style.TextOverflow
 import androidx.ui.tooling.preview.Preview
 import androidx.ui.unit.dp
 import com.example.playwithcompose.ui.AppTheme
+import com.example.playwithcompose.ui.loadBitmap
 
 
 data class Bass(
@@ -58,13 +57,6 @@ fun BassList(basses: List<Bass>) {
                         }
                 )
             },
-            floatingActionButtonPosition = Scaffold.FabPosition.End,
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                        text = { Text("Inc") },
-                        onClick = { /* fab click handler */ }
-                )
-            },
             bodyContent = {
                 AdapterList(data = basses) {
                     Clickable(modifier = Modifier.ripple(),
@@ -90,15 +82,26 @@ fun BassApp() {
 fun BassCell(bass: Bass = basses.first()) {
     val typography = MaterialTheme.typography
 
-    Column(
-            modifier = Modifier.padding(commonSpace).fillMaxWidth()
-    ) {
-        val imageModifier = Modifier.width(50.dp).height(50.dp)
-        Image(asset = imageResource(id = R.drawable.bass), modifier = imageModifier)
-        Text(bass.title, style = typography.h2)
-        Text(bass.subtitle, style = typography.h4)
-    }
+    Row(modifier = Modifier.padding(commonSpace).fillMaxWidth()) {
+        val imageSideLength = 70.dp
+        val imageModifier = Modifier.preferredWidth(imageSideLength)
+                .preferredHeight(imageSideLength)
+                .clip(RoundedCornerShape(7.dp))
 
+        val sideIpx = with(DensityAmbient.current) { imageSideLength.toIntPx() }
+
+        loadBitmap(bass.imageUrl, sideIpx, sideIpx)?.let {
+            Image(asset = it.asImageAsset(), modifier = imageModifier, contentScale = ContentScale.Crop)
+        }
+
+        Column(
+                modifier = Modifier.fillMaxWidth().padding(start = commonSpace)
+        ) {
+
+            Text(bass.title, style = typography.body1)
+            Text(bass.subtitle, style = typography.body1)
+        }
+    }
 }
 
 @Composable

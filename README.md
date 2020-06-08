@@ -1,1 +1,1 @@
-![Simple component](./assets/bass-detail.png)
+![Screenshot](./assets/app-screenshot.png)
