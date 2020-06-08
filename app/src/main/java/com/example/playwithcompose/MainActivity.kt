@@ -1,32 +1,79 @@
 package com.example.playwithcompose
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
+import androidx.compose.remember
 import androidx.ui.core.ContentScale
 import androidx.ui.core.Modifier
 import androidx.ui.core.clip
 import androidx.ui.core.setContent
-import androidx.ui.foundation.Image
-import androidx.ui.foundation.Text
+import androidx.ui.foundation.*
 import androidx.ui.foundation.shape.corner.RoundedCornerShape
-import androidx.ui.graphics.ImageAsset
+import androidx.ui.graphics.Color
 import androidx.ui.layout.*
-import androidx.ui.material.MaterialTheme
+import androidx.ui.material.*
+import androidx.ui.material.icons.Icons
+import androidx.ui.material.icons.filled.Menu
+import androidx.ui.material.ripple.ripple
 import androidx.ui.res.imageResource
 import androidx.ui.text.style.TextOverflow
 import androidx.ui.tooling.preview.Preview
-import androidx.ui.tooling.preview.datasource.LoremIpsum
 import androidx.ui.unit.dp
 import com.example.playwithcompose.ui.AppTheme
+
+
+data class Bass(
+        val imageUrl: String, val imageCaption: String,
+        val title: String, val subtitle: String, val body: String
+)
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BassApp()
+            BassList(basses)
         }
     }
+}
+
+val commonSpace = 16.dp
+
+@Composable
+fun BassList(basses: List<Bass>) {
+    val scaffoldState = remember { ScaffoldState() }
+    Scaffold(
+            scaffoldState = scaffoldState,
+            drawerContent = { Text("Drawer content") },
+            topAppBar = {
+                TopAppBar(
+                        title = { Text("BassList") },
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                scaffoldState.drawerState = DrawerState.Opened
+                            }) {
+                                Icon(Icons.Filled.Menu)
+                            }
+                        }
+                )
+            },
+            floatingActionButtonPosition = Scaffold.FabPosition.End,
+            floatingActionButton = {
+                ExtendedFloatingActionButton(
+                        text = { Text("Inc") },
+                        onClick = { /* fab click handler */ }
+                )
+            },
+            bodyContent = {
+                AdapterList(data = basses) {
+                    Clickable(modifier = Modifier.ripple(),
+                              onClick = { Log.d("onClickList", "clicked!") }) {
+                        BassCell(it)
+                    }
+                }
+            }
+    )
 }
 
 @Composable
@@ -39,8 +86,23 @@ fun BassApp() {
 }
 
 @Composable
+@Preview
+fun BassCell(bass: Bass = basses.first()) {
+    val typography = MaterialTheme.typography
+
+    Column(
+            modifier = Modifier.padding(commonSpace).fillMaxWidth()
+    ) {
+        val imageModifier = Modifier.width(50.dp).height(50.dp)
+        Image(asset = imageResource(id = R.drawable.bass), modifier = imageModifier)
+        Text(bass.title, style = typography.h2)
+        Text(bass.subtitle, style = typography.h4)
+    }
+
+}
+
+@Composable
 fun BassDetail() {
-    val commonSpace = 16.dp
     val typography = MaterialTheme.typography
 
     Column(
@@ -58,7 +120,7 @@ fun BassDetail() {
         Spacer(Modifier.preferredHeight(commonSpace))
         Text("Tribe SF4", style = typography.h2)
         Text("Fretboard en érable", style = typography.h4)
-        Spacer(Modifier.preferredHeight(commonSpace))
+        Divider(color = Color.Black)
         Text(
                 """
                     Née en 2016, la SF a été immédiatement testée sur la scène du stade Meazza.
