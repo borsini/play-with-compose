@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlayWithCompose">
         <activity
-            android:name=".BassListActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.PlayWithCompose.NoActionBar">
             <intent-filter>

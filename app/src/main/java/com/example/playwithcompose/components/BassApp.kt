@@ -14,10 +14,12 @@ import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.Menu
 import androidx.ui.material.ripple.ripple
 import com.example.playwithcompose.ui.AppTheme
+import com.example.playwithcompose.ui.Screen
 
 @Composable
-fun BassApp(
-        bodyContent: @Composable() () -> Unit
+fun AppScreen(
+    screenTitle: String,
+    bodyContent: @Composable() () -> Unit
 ) {
     AppTheme {
         val scaffoldState = remember { ScaffoldState() }
@@ -25,7 +27,7 @@ fun BassApp(
                 scaffoldState = scaffoldState,
                 topAppBar = {
                     TopAppBar(
-                            title = { Text("BassList") },
+                            title = { Text(screenTitle) },
                             navigationIcon = {
                                 IconButton(onClick = {
                                     scaffoldState.drawerState = DrawerState.Opened
