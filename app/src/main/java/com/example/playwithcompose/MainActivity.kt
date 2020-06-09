@@ -24,8 +24,12 @@ import com.example.playwithcompose.ui.loadBitmap
 
 
 data class Bass(
-        val imageUrl: String, val imageCaption: String,
-        val title: String, val subtitle: String, val body: String
+        val model: String,
+        val brand: String,
+        val price: Float,
+        val imageUrl: String,
+        val description: String,
+        val websiteUrl: String
 )
 
 class MainActivity : AppCompatActivity() {
@@ -60,7 +64,7 @@ fun BassList(basses: List<Bass>) {
             bodyContent = {
                 AdapterList(data = basses) {
                     Clickable(modifier = Modifier.ripple(),
-                              onClick = { Log.d("onClickList", "clicked!") }) {
+                            onClick = { Log.d("onClickList", "clicked!") }) {
                         BassCell(it)
                     }
                 }
@@ -98,8 +102,8 @@ fun BassCell(bass: Bass = basses.first()) {
                 modifier = Modifier.fillMaxWidth().padding(start = commonSpace)
         ) {
 
-            Text(bass.title, style = typography.body1)
-            Text(bass.subtitle, style = typography.body1)
+            Text(bass.model, style = typography.body1)
+            Text(bass.brand, style = typography.body1)
         }
     }
 }
@@ -111,15 +115,13 @@ fun BassDetail() {
     Column(
             modifier = Modifier.padding(commonSpace)
     ) {
+        val imageModifier = Modifier
+                .fillMaxWidth()
+                .preferredHeight(200.dp)
+                .clip(RoundedCornerShape(10.dp))
+        Image(asset = imageResource(id = R.drawable.bass), modifier = imageModifier,
+                contentScale = ContentScale.Crop)
 
-        SomethingWithCaption("La Tribe SF4 en action !") {
-            val imageModifier = Modifier
-                    .fillMaxWidth()
-                    .preferredHeight(200.dp)
-                    .clip(RoundedCornerShape(10.dp))
-            Image(asset = imageResource(id = R.drawable.bass), modifier = imageModifier,
-                    contentScale = ContentScale.Crop)
-        }
         Spacer(Modifier.preferredHeight(commonSpace))
         Text("Tribe SF4", style = typography.h2)
         Text("Fretboard en érable", style = typography.h4)
@@ -135,14 +137,6 @@ fun BassDetail() {
                 overflow = TextOverflow.Ellipsis,
                 style = typography.body1)
 
-    }
-}
-
-@Composable
-fun SomethingWithCaption(title: String, content: @Composable() () -> Unit) {
-    Column {
-        content()
-        Text(title, style = MaterialTheme.typography.caption)
     }
 }
 
