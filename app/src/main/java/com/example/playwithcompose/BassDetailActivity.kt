@@ -13,7 +13,7 @@ class BassDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BassDetail()
+            BassDetail(fakeBasses.first())
         }
     }
 }

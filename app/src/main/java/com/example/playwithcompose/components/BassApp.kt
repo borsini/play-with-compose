@@ -23,7 +23,6 @@ fun BassApp(
         val scaffoldState = remember { ScaffoldState() }
         Scaffold(
                 scaffoldState = scaffoldState,
-                drawerContent = { Text("Drawer content") },
                 topAppBar = {
                     TopAppBar(
                             title = { Text("BassList") },
