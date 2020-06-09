@@ -1,6 +1,8 @@
 package com.example.playwithcompose
 
-val basses = listOf<Bass>(
+import com.example.playwithcompose.models.Bass
+
+val fakeBasses = listOf<Bass>(
         Bass("SF4",
                 "Tribe",
                 1089f,
