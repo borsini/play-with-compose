@@ -12,21 +12,23 @@ import com.example.playwithcompose.components.BassDetail
 import com.example.playwithcompose.components.BassList
 import com.example.playwithcompose.ui.BassAppStatus
 import com.example.playwithcompose.ui.Screen
-import com.example.playwithcompose.ui.navigateTo
 
 
 class MainActivity : AppCompatActivity() {
+
+    private val status: BassAppStatus = BassAppStatus()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            content()
+            content(status)
         }
     }
 }
 
 @Composable
-private fun content() {
-    Crossfade(BassAppStatus.currentScreen) { screen ->
+private fun content(status: BassAppStatus) {
+    Crossfade(status.currentScreen) { screen ->
         AppScreen(
                 when (screen) {
                     is Screen.BassList -> "BassList"
@@ -35,7 +37,7 @@ private fun content() {
         ) {
             when (screen) {
                 is Screen.BassList -> BassList(fakeBasses) {
-                    navigateTo(Screen.BassDetail(it))
+                    status.navigateTo(Screen.BassDetail(it))
                 }
                 is Screen.BassDetail -> BassDetail(screen.bass)
             }
@@ -46,7 +48,7 @@ private fun content() {
 @Preview(showBackground = true)
 @Composable
 fun ScreenPreview() {
-    content()
+    content(BassAppStatus())
 }
 
 val commonSpace = 16.dp

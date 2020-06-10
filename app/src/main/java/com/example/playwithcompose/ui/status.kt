@@ -12,13 +12,11 @@ sealed class Screen {
 }
 
 @Model
-object BassAppStatus {
+class BassAppStatus {
     var currentScreen: Screen = Screen.BassList
+
+    fun navigateTo(destination: Screen) {
+        currentScreen = destination
+    }
 }
 
-/**
- * Temporary solution pending navigation support.
- */
-fun navigateTo(destination: Screen) {
-    BassAppStatus.currentScreen = destination
-}
