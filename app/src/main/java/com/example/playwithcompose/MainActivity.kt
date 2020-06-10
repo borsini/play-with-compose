@@ -12,6 +12,7 @@ import com.example.playwithcompose.components.BassDetail
 import com.example.playwithcompose.components.BassList
 import com.example.playwithcompose.ui.BassAppStatus
 import com.example.playwithcompose.ui.Screen
+import com.example.playwithcompose.ui.navigateTo
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,13 +28,15 @@ class MainActivity : AppCompatActivity() {
 private fun content() {
     Crossfade(BassAppStatus.currentScreen) { screen ->
         AppScreen(
-            when (screen) {
-                is Screen.BassList -> "BassList"
-                is Screen.BassDetail -> screen.bass.model
-            }
+                when (screen) {
+                    is Screen.BassList -> "BassList"
+                    is Screen.BassDetail -> screen.bass.model
+                }
         ) {
             when (screen) {
-                is Screen.BassList -> BassList(fakeBasses)
+                is Screen.BassList -> BassList(fakeBasses) {
+                    navigateTo(Screen.BassDetail(it))
+                }
                 is Screen.BassDetail -> BassDetail(screen.bass)
             }
         }
