@@ -13,7 +13,6 @@ import com.example.playwithcompose.components.BassList
 import com.example.playwithcompose.ui.BassAppStatus
 import com.example.playwithcompose.ui.Screen
 
-
 class MainActivity : AppCompatActivity() {
 
     private val status: BassAppStatus = BassAppStatus()
@@ -22,6 +21,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             content(status)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (!status.navigateBack()) {
+            super.onBackPressed()
         }
     }
 }
