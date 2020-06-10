@@ -1,5 +1,7 @@
 package com.example.playwithcompose
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.Composable
@@ -20,8 +22,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            content(state)
+            content(state) {
+                startActivity(Intent(Intent.ACTION_VIEW, it))
+            }
         }
+
+        intent?.data?.let { state.navigateTo(it) }
     }
 
     override fun onBackPressed() {
@@ -32,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-private fun content(state: BassAppState) {
+private fun content(state: BassAppState, onLinkClicked: (Uri) -> Unit) {
     Crossfade(state.currentScreen) { screen ->
         AppScreen(
                 when (screen) {
@@ -45,7 +51,7 @@ private fun content(state: BassAppState) {
                 is Screen.BassList -> BassList(fakeBasses) {
                     state.navigateTo(Screen.BassDetail(it))
                 }
-                is Screen.BassDetail -> BassDetail(screen.bass)
+                is Screen.BassDetail -> BassDetail(screen.bass, onLinkClicked)
             }
         }
     }
@@ -54,7 +60,7 @@ private fun content(state: BassAppState) {
 @Preview(showBackground = true)
 @Composable
 fun ScreenPreview() {
-    content(BassAppState())
+    content(BassAppState(), {})
 }
 
 val commonSpace = 16.dp
