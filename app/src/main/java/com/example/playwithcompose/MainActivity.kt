@@ -10,39 +10,40 @@ import androidx.ui.unit.dp
 import com.example.playwithcompose.components.AppScreen
 import com.example.playwithcompose.components.BassDetail
 import com.example.playwithcompose.components.BassList
-import com.example.playwithcompose.ui.BassAppStatus
+import com.example.playwithcompose.ui.BassAppState
 import com.example.playwithcompose.ui.Screen
 
 class MainActivity : AppCompatActivity() {
 
-    private val status: BassAppStatus = BassAppStatus()
+    private val state = BassAppState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            content(status)
+            content(state)
         }
     }
 
     override fun onBackPressed() {
-        if (!status.navigateBack()) {
+        if (!state.navigateBack()) {
             super.onBackPressed()
         }
     }
 }
 
 @Composable
-private fun content(status: BassAppStatus) {
-    Crossfade(status.currentScreen) { screen ->
+private fun content(state: BassAppState) {
+    Crossfade(state.currentScreen) { screen ->
         AppScreen(
                 when (screen) {
-                    is Screen.BassList -> "BassList"
+                    is Screen.BassList -> "All basses"
                     is Screen.BassDetail -> screen.bass.model
-                }
+                },
+                state
         ) {
             when (screen) {
                 is Screen.BassList -> BassList(fakeBasses) {
-                    status.navigateTo(Screen.BassDetail(it))
+                    state.navigateTo(Screen.BassDetail(it))
                 }
                 is Screen.BassDetail -> BassDetail(screen.bass)
             }
@@ -53,7 +54,7 @@ private fun content(status: BassAppStatus) {
 @Preview(showBackground = true)
 @Composable
 fun ScreenPreview() {
-    content(BassAppStatus())
+    content(BassAppState())
 }
 
 val commonSpace = 16.dp
