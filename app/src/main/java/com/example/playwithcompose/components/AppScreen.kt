@@ -2,16 +2,20 @@ package com.example.playwithcompose.components
 
 import androidx.compose.Composable
 import androidx.compose.remember
+import androidx.ui.core.Modifier
+import androidx.ui.foundation.Box
 import androidx.ui.foundation.Icon
 import androidx.ui.foundation.Text
-import androidx.ui.material.IconButton
-import androidx.ui.material.Scaffold
-import androidx.ui.material.ScaffoldState
-import androidx.ui.material.TopAppBar
+import androidx.ui.layout.Column
+import androidx.ui.material.*
 import androidx.ui.material.icons.Icons
 import androidx.ui.material.icons.filled.ArrowBack
+import androidx.ui.material.icons.filled.Home
+import androidx.ui.material.icons.filled.Settings
+import androidx.ui.material.icons.filled.ShoppingCart
 import com.example.playwithcompose.ui.AppTheme
 import com.example.playwithcompose.ui.BassAppState
+import com.example.playwithcompose.ui.Screen
 
 @Composable
 fun AppScreen(
@@ -35,7 +39,35 @@ fun AppScreen(
                             }
                     )
                 },
-                bodyContent = { bodyContent() }
+                bodyContent = {
+                    Column {
+                        Box(Modifier.weight(1f)) {
+                            bodyContent()
+                        }
+                        Box {
+                            BottomNavigation {
+                                BottomNavigationItem(
+                                        icon = { Icon(Icons.Filled.Home) },
+                                        text = { Text("All basses") },
+                                        selected = state.currentScreen == Screen.BassList,
+                                        onSelected = { state.navigateTo(Screen.BassList) }
+                                )
+                                BottomNavigationItem(
+                                        icon = { Icon(Icons.Filled.ShoppingCart) },
+                                        text = { Text("My cart") },
+                                        selected = false,
+                                        onSelected = {}
+                                )
+                                BottomNavigationItem(
+                                        icon = { Icon(Icons.Filled.Settings) },
+                                        text = { Text("Settings") },
+                                        selected = false,
+                                        onSelected = {}
+                                )
+                            }
+                        }
+                    }
+                }
         )
     }
 }
