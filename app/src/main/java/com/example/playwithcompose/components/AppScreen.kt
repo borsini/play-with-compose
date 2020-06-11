@@ -19,55 +19,66 @@ import com.example.playwithcompose.ui.Screen
 
 @Composable
 fun AppScreen(
-        screenTitle: String,
-        state: BassAppState,
-        bodyContent: @Composable() () -> Unit
+    screenTitle: String,
+    state: BassAppState,
+    bodyContent: @Composable() () -> Unit
 ) {
     AppTheme {
         val scaffoldState = remember { ScaffoldState() }
         Scaffold(
-                scaffoldState = scaffoldState,
-                topAppBar = {
-                    TopAppBar(
-                            title = { Text(screenTitle) },
-                            navigationIcon = {
-                                if (state.canGoBack) {
-                                    IconButton(onClick = { state.navigateBack() }) {
-                                        Icon(Icons.Filled.ArrowBack)
-                                    }
+            scaffoldState = scaffoldState,
+            topAppBar = {
+                TopAppBar(
+                    title = { Text(screenTitle) },
+                    navigationIcon = {
+                        if (state.canGoBack) {
+                            IconButton(onClick = { state.navigateBack() }) {
+                                Icon(Icons.Filled.ArrowBack)
+                            }
+                        }
+                    },
+                    actions = {
+                        val currentScreen = state.currentScreen
+                        when (currentScreen) {
+                            is Screen.BassDetail -> {
+                                IconButton(onClick = { state.addToCart(currentScreen.bass) }) {
+                                    Icon(Icons.Filled.ShoppingCart)
                                 }
                             }
-                    )
-                },
-                bodyContent = {
-                    Column {
-                        Box(Modifier.weight(1f)) {
-                            bodyContent()
                         }
-                        Box {
-                            BottomNavigation {
-                                BottomNavigationItem(
-                                        icon = { Icon(Icons.Filled.Home) },
-                                        text = { Text("All basses") },
-                                        selected = state.currentScreen == Screen.BassList,
-                                        onSelected = { state.navigateTo(Screen.BassList) }
-                                )
-                                BottomNavigationItem(
-                                        icon = { Icon(Icons.Filled.ShoppingCart) },
-                                        text = { Text("My cart") },
-                                        selected = false,
-                                        onSelected = {}
-                                )
-                                BottomNavigationItem(
-                                        icon = { Icon(Icons.Filled.Settings) },
-                                        text = { Text("Settings") },
-                                        selected = false,
-                                        onSelected = {}
-                                )
-                            }
+
+                    }
+                )
+            },
+            bodyContent = {
+                Column {
+                    Box(Modifier.weight(1f)) {
+                        bodyContent()
+                    }
+                    Box {
+                        BottomNavigation {
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.Filled.Home) },
+                                text = { Text("All basses") },
+                                selected = state.currentScreen == Screen.BassList,
+                                onSelected = { state.navigateTo(Screen.BassList) }
+                            )
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.Filled.ShoppingCart) },
+                                text = { Text("${state.cartTotal} €") },
+                                selected = state.currentScreen == Screen.Cart,
+                                onSelected = { state.navigateTo(Screen.Cart) }
+                            )
+                            BottomNavigationItem(
+                                icon = { Icon(Icons.Filled.Settings) },
+                                text = { Text("Settings") },
+                                selected = false,
+                                onSelected = {}
+                            )
                         }
                     }
                 }
+            }
         )
     }
 }

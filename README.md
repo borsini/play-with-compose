@@ -1,1 +1,1 @@
-![Screenshot](./assets/app-screenshot.png)
+![Showcase](./assets/showcase.gif)

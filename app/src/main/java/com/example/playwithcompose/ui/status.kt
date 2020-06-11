@@ -5,12 +5,15 @@ import androidx.compose.Model
 import com.example.playwithcompose.fakeBasses
 import com.example.playwithcompose.models.Bass
 import java.util.*
+import kotlin.collections.ArrayList
 
 sealed class Screen {
     object BassList : Screen()
     data class BassDetail(val bass: Bass) : Screen()
+    object Cart : Screen()
 
     companion object {
+
         fun fromUri(uri: Uri): Screen? {
             if (uri.pathSegments.size == 2 && uri.pathSegments[0] == "detail") {
                 val bassId = uri.pathSegments[1].toString()
@@ -25,8 +28,19 @@ sealed class Screen {
 @Model
 class BassAppState {
     val screens = LinkedList<Screen>().apply { push(Screen.BassList) }
-
+    var cart = ArrayList<Bass>()
     var currentScreen: Screen = Screen.BassList
+    var cartTotal: Float = 0f
+
+    fun addToCart(bass: Bass) {
+        cart = ArrayList(cart).apply { add(bass) }
+        cartTotal = cart.map { it.price }.fold(0f) { acc, price -> acc + price }
+    }
+
+    fun removeFromCart(bass: Bass) {
+        cart = ArrayList(cart).apply { remove(bass) }
+        cartTotal = cart.map { it.price }.fold(0f) { acc, price -> acc + price }
+    }
 
     fun navigateTo(destination: Screen) {
         if (currentScreen == destination) return

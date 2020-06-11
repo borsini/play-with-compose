@@ -12,6 +12,7 @@ import androidx.ui.unit.dp
 import com.example.playwithcompose.components.AppScreen
 import com.example.playwithcompose.components.BassDetail
 import com.example.playwithcompose.components.BassList
+import com.example.playwithcompose.components.Cart
 import com.example.playwithcompose.ui.BassAppState
 import com.example.playwithcompose.ui.Screen
 
@@ -41,17 +42,19 @@ class MainActivity : AppCompatActivity() {
 private fun content(state: BassAppState, onLinkClicked: (Uri) -> Unit) {
     Crossfade(state.currentScreen) { screen ->
         AppScreen(
-                when (screen) {
-                    is Screen.BassList -> "All basses"
-                    is Screen.BassDetail -> screen.bass.model
-                },
-                state
+            when (screen) {
+                is Screen.BassList -> "All basses"
+                is Screen.BassDetail -> screen.bass.model
+                is Screen.Cart -> "Cart"
+            },
+            state
         ) {
             when (screen) {
-                is Screen.BassList -> BassList(fakeBasses) {
+                is Screen.BassList -> BassList(fakeBasses, state) {
                     state.navigateTo(Screen.BassDetail(it))
                 }
                 is Screen.BassDetail -> BassDetail(screen.bass, onLinkClicked)
+                is Screen.Cart -> Cart(state)
             }
         }
     }
